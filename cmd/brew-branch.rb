@@ -23,10 +23,6 @@ if ARGV.size != 1
   odie <<-EOS.undent
     `brew branch` takes a single formula as its argument.
   EOS
-elsif !Dir.pwd.include?(HOMEBREW_PREFIX)
-  odie <<-EOS.undent
-    Run `brew branch` from within your Homebrew repository.
-  EOS
 else
   begin
     branch_edit Formulary.factory(ARGV.first)
