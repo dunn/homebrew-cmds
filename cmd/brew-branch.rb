@@ -5,11 +5,16 @@ def current_branch
 end
 
 def branch_edit(f)
-  branches = `git branch | awk '{ print $1 }'`.split("\n")
-  b = (branches.include? f.name) ? "" : "-b"
-
   Dir.chdir f.path.dirname
-  system "git", "checkout", "#{b}", "#{f.name}" if current_branch != f.name
+  branches = `git branch | awk '{ print $1 }'`.split("\n")
+
+  args = ["checkout"]
+  args << "-b" unless branches.include? f.name
+  args << f.name
+
+  if current_branch != f.name
+    system "git", *args
+  end
 
   exec_editor(f.path)
 end
@@ -18,7 +23,7 @@ if ARGV.size != 1
   odie <<-EOS.undent
     `brew branch` takes a single formula as its argument.
   EOS
-elsif !Dir.pwd.include? HOMEBREW_PREFIX
+elsif !Dir.pwd.include?(HOMEBREW_PREFIX)
   odie <<-EOS.undent
     Run `brew branch` from within your Homebrew repository.
   EOS
