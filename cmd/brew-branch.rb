@@ -8,11 +8,11 @@ def branch_edit(f)
   Dir.chdir f.path.dirname
   branches = `git branch | awk '{ print $1 }'`.split("\n")
 
-  args = ["checkout"]
-  args << "-b" unless branches.include? f.name
-  args << f.name
-
   if current_branch != f.name
+    args = ["checkout"]
+    args << "-b" unless branches.include? f.name
+    args << f.name
+
     system "git", *args
   end
 
