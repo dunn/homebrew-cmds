@@ -24,11 +24,8 @@ elsif !Dir.pwd.include? HOMEBREW_PREFIX
   EOS
 else
   begin
-    working_dir = Dir.pwd
     branch_edit Formulary.factory(ARGV.first)
   rescue FormulaUnavailableError
     raise
-  ensure
-    Dir.chdir working_dir
   end
 end
