@@ -16,6 +16,7 @@ def branch_edit(f)
     system "git", *args
   end
 
+  system "brew", "style", "--fix", f.name
   exec_editor(f.path)
 end
 
