@@ -14,6 +14,7 @@ def branch_edit(f)
     args << f.name
 
     system "git", *args
+    return if current_branch != f.name
   end
 
   system "brew", "style", "--fix", f.name
