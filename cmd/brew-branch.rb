@@ -6,6 +6,7 @@ end
 
 def branch_edit(f)
   Dir.chdir f.path.dirname
+  system "git", "checkout", "master"
   branches = `git branch | awk '{ print $1 }'`.split("\n")
 
   if current_branch != f.name
