@@ -1,32 +1,49 @@
-# brew old [days]
+# brew old [days] [--all] [--simple]
 #
 # List the installed formula that haven't been updated in however many
-# days.  If no number is given, 60 is used.
+# days.
+#
+# If no number is given, 60 is used.
+#
+# If --all is used, check all tapped formula, not just those installed.
+#
+# If --simple is used, just print old formula names.
 
 require "formula"
 require "date"
 
-HOMEBREW_REPOSITORY.cd do
-  Formula.installed.each do |f|
-    if f.core_formula?
-      git_dir = "#{HOMEBREW_REPOSITORY}/.git"
-      formula_path = f.path
-    else
-      formula_path = f.path.basename
-      # taps don't always have a 'Formula' directory
-      if Dir["#{f.path.dirname}/.git/*"].empty?
-        git_dir = "#{f.path.dirname.parent}/.git"
-      else
-        git_dir = "#{f.path.dirname}/.git"
+if ARGV.flag? "--simple"
+  @simple = true
+  ARGV.delete "--simple"
+end
+
+if ARGV.flag? "--all"
+  all = true
+  ARGV.delete "--all"
+end
+
+@time_back = ARGV.first || 60
+@date_limit = Date.today - @time_back.to_i
+
+def check_old f
+  f.path.dirname.cd do
+    last_commit = `git log -n 1 --since=#{@date_limit} -- #{f.path}`
+    if last_commit.empty?
+      output = f.full_name
+      unless @simple
+        output << " hasn't been updated in #{@time_back} days"
       end
+      puts output
     end
+  end
+end
 
-    time_back = ARGV.first || 60
-    date_limit = Date.today - time_back.to_i
-
-    local_commit_time = `git --git-dir=#{git_dir} log -n 1 --since=#{date_limit} --pretty=format:%cd --date=local -- #{formula_path}`
-    if local_commit_time.empty?
-      puts "#{f.full_name} hasn't been updated in #{time_back} days"
-    end
+if all
+  Formula.each do |f|
+    check_old f
+  end
+else
+  Formula.installed.each do |f|
+    check_old f
   end
 end
