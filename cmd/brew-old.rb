@@ -1,3 +1,8 @@
+# brew old [days]
+#
+# List the installed formula that haven't been updated in however many
+# days.  If no number is given, 60 is used.
+
 require "formula"
 require "date"
 

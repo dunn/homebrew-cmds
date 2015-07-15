@@ -1,3 +1,8 @@
+# brew branch <formula>
+#
+# Switch to a branch called <formula> (creating it if necessary), then
+# fix style errors and open the formula file in $EDITOR
+
 require "formula"
 
 def current_branch

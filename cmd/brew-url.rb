@@ -1,3 +1,8 @@
+# brew url <formula>
+#
+# List the associated URLs for the given formulae: main download link,
+# head, devel, bottle for the current OS.
+
 require "formula"
 
 def print_urls(f)
