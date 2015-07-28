@@ -32,7 +32,7 @@ ARGV.named.each do |f|
   f_args = Array.new(git_args) << "--" << "Formula/#{f}.rb"
   commits = `git #{f_args.join(" ")}`.strip.split("\n")
   commits.each_with_index do |elem, index|
-    # split into array with hash and time
+    # split into and array with two elements: hash and time
     commit = elem.split("-")
     ctime = Time.at(commit[1].to_i).strftime("%Y-%m-%d")
     if index == 0
@@ -40,7 +40,12 @@ ARGV.named.each do |f|
     else
       # get the diff of tap_migrations from the commit where the formula was deleted
       migrations = `git diff #{commit[0]}~1..#{commit[0]} -- Homebrew/tap_migrations.rb`.strip.split("\n")
+      # find the line in the diff relevant to our formula
+      #
+      # the presence of '=>' in the diff lines causes ruby to treat
+      # each element as a hash rather than a string, so convert it to_s
       new_tap = migrations.select { |s| s.include?("\"#{f}\"") }.to_s
+      # then extract the name of the new tap from the diff line
       new_tap = %r{(?<=\=\>)[^a-zA-Z]*([^\\]*\/[^\\]*)}.match(new_tap).captures[0]
       if new_tap
         puts "#{Tty.white}Moved#{Tty.reset} to #{new_tap} on #{ctime} in #{commit[0]}"
