@@ -23,7 +23,7 @@ unless (HOMEBREW_REPOSITORY/".git").exist?
   EOS
 end
 
-# the dash between hash and unixtime in --format is used in .split("-") below
+# the dash between hash (%H) and unixtime (%at) in --format is removed with .split("-") below
 git_args = %w[log --reverse --format="%H-%at" --diff-filter=AD]
 
 Dir.chdir HOMEBREW_LIBRARY
