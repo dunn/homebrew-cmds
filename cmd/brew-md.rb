@@ -8,7 +8,7 @@ all = ""
 ARGV.each do |formula|
   md = "[`#{formula}.rb`](https://github.com/Homebrew/homebrew/blob/master/Library/Formula/#{formula}.rb)"
   puts md
-  all += "#{md}\n"
+  all += "#{md}"
 end
 
 `echo '#{all}' | pbcopy`
