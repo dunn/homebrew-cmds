@@ -25,7 +25,7 @@ end
 @time_back = ARGV.first || 60
 @date_limit = Date.today - @time_back.to_i
 
-def check_old f
+def check_old(f)
   f.path.dirname.cd do
     last_commit = `git log -n 1 --since=#{@date_limit} -- #{f.path}`
     if last_commit.empty?
