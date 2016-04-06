@@ -2,13 +2,22 @@
 #
 # Generate Markdown links to formula files on GitHub
 
+require "cmd/info"
+
 raise FormulaUnspecifiedError if ARGV.empty?
 
 all = ""
 ARGV.each do |formula|
-  md = "[`#{formula}.rb`](https://github.com/Homebrew/homebrew/blob/master/Library/Formula/#{formula}.rb)"
-  puts md
-  all += "#{md}"
+  begin
+    f = Formulary.factory(formula)
+    remote = f.tap.remote
+    path = f.path.relative_path_from(f.tap.path)
+    md = "[`#{f}.rb`](#{Homebrew.github_remote_path(remote, path)})"
+    puts md
+    all += "#{md}\n"
+  rescue FormulaUnavailableError
+    puts "No formula called '#{formula}'."
+  end
 end
 
-`echo '#{all}' | pbcopy`
+`echo '#{all.strip}' | pbcopy`
