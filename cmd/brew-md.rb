@@ -12,7 +12,7 @@ ARGV.each do |formula|
     f = Formulary.factory(formula)
     remote = f.tap.remote
     path = f.path.relative_path_from(f.tap.path)
-    md = "[`#{f}.rb`](#{Homebrew.github_remote_path(remote, path)})"
+    md = "[`#{f.full_name}.rb`](#{Homebrew.github_remote_path(remote, path)})"
     puts md
     all += "#{md}\n"
   rescue FormulaUnavailableError
