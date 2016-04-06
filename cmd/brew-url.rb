@@ -25,6 +25,6 @@ ARGV.each do |formula|
   begin
     print_urls(Formulary.factory(formula))
   rescue FormulaUnavailableError
-    raise
+    puts "No formula named '#{formula}'."
   end
 end
