@@ -6,7 +6,7 @@
 require "formula"
 
 def print_urls(f)
-  puts "#{Tty.em}#{f.name}.rb#{Tty.reset}"
+  puts "#{Tty.underline}#{f.name}.rb#{Tty.reset}"
   %w[stable bottle devel head].each do |source|
     next unless f.send(source)
     url = "#{Tty.white}#{source}#{Tty.reset}"
