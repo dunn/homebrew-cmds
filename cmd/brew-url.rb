@@ -9,7 +9,7 @@ def print_urls(f)
   puts "#{Tty.underline}#{f.name}.rb#{Tty.reset}"
   %w[stable bottle devel head].each do |source|
     next unless f.send(source)
-    url = "#{Tty.white}#{source}#{Tty.reset}"
+    url = "#{Tty.bold}#{source}#{Tty.reset}"
     url += "\t"
     url += f.send(source).url
     if source != "bottle" && f.send(source).specs
